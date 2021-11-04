@@ -28,7 +28,7 @@ namespace AuthorisationService {
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "AuthorisationService", Version = "v1" });
             });
-            Console.WriteLine(" -- startup");
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
