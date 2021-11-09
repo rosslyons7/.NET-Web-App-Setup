@@ -1,0 +1,59 @@
+{
+  "Routes": [
+    {
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "user_api",
+          "Port": "80"
+        }
+      ],
+      "DownstreamPathTemplate": "/api/user",
+      "DownstreamScheme": "http",
+      "UpstreamPathTemplate": "/GetUsers"
+    },
+    {
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "user_api",
+          "Port": "80"
+        }
+      ],
+      "DownstreamPathTemplate": "/api/user/GetUser",
+      "DownstreamScheme": "http",
+      "UpstreamPathTemplate": "/GetUser"
+    },
+    {
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "user_api",
+          "Port": "80"
+        }
+      ],
+      "DownstreamPathTemplate": "/api/user/CreateUser",
+      "DownstreamScheme": "http",
+      "UpstreamPathTemplate": "/CreateUser"
+    },
+    {
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "user_api",
+          "Port": "80"
+        }
+      ],
+      "DownstreamPathTemplate": "/api/user/UpdateUser",
+      "DownstreamScheme": "http",
+      "UpstreamPathTemplate": "/UpdateUser"
+    },
+    {
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "user_api",
+          "Port": "80"
+        }
+      ],
+      "DownstreamPathTemplate": "/api/user/DeleteUser",
+      "DownstreamScheme": "http",
+      "UpstreamPathTemplate": "/DeleteUser"
+    }
+  ]
+}

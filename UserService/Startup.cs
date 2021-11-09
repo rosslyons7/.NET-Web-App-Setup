@@ -11,6 +11,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using UserService.Services;
+using UserService.Subscriptions;
 
 namespace UserService {
     public class Startup {
@@ -28,6 +30,15 @@ namespace UserService {
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "UserService", Version = "v1" });
             });
+
+            services.AddScoped<IUserService, Services.UserService>();
+            services.AddSingleton<IHostedService>(sp => new UserConsumer(
+                    exchange: "user.exchange",
+                    queue: "user.queue",
+                    routingKey: "user.*.*",
+                    loggerFactory: sp.GetRequiredService<ILoggerFactory>(),
+                    serviceProvider: sp.GetRequiredService<IServiceProvider>(),
+                    config: Configuration));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

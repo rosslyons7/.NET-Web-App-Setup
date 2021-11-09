@@ -1,0 +1,64 @@
+﻿version: "3.9"
+
+services:
+  authapi:
+      container_name: auth_api
+      build: AuthorisationService/
+      ports:
+       - "5000:80"
+      depends_on:
+       - authdb        
+       - rabbitmq
+  authdb:
+      container_name: auth_db
+      image: mysql:5.7
+      restart: always
+      environment:
+        MYSQL_DATABASE: 'db'
+        MYSQL_USER: ${MYSQL_USER}
+        MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+        MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      ports:
+       - '3306:3306'
+      volumes:
+       - auth-db:/var/lib/mysql
+
+  userdb:
+      container_name: user_db
+      image: mysql:latest
+      restart: always
+      environment:
+          MYSQL_DATABASE: 'db'
+          MYSQL_USER: ${MYSQL_USER}
+          MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+          MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      ports:
+        - '3307:3306'
+      expose:
+       - '3307'
+      volumes:
+        - user-db:/var/lib/mysql
+  userapi:
+       container_name: user_api
+       build: 
+         context: UserService/
+       ports:
+         - "5001:80"
+       restart: always
+       depends_on:
+        - userdb
+        - rabbitmq
+  rabbitmq:
+       image: rabbitmq:3.9-management
+       container_name: 'rabbitmq'
+       ports:
+           - 5672:5672
+           - 15672:15672
+       volumes:
+           - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
+           - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
+
+volumes:
+  auth-db:
+  user-db:
+

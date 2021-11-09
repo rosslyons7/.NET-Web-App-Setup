@@ -25,20 +25,6 @@ namespace UserService.Controllers {
             _logger = logger;
         }
 
-        [HttpGet]
-        public IActionResult Get() {
-            string result;
-            try {
-                using (IDbConnection db = new MySqlConnection("Server=db,3306;Database=user_db;Uid=root;Pwd=password;")) {
-
-                    result = db.Query<string>("SELECT * FROM users").First();
-                }
-
-                return Ok(result);
-            }catch(Exception e) {
-                return BadRequest(e.Message);
-            }
-            
-        }
+        
     }
 }
