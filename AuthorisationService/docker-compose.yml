@@ -1,12 +1,25 @@
 ﻿version: "3.9"
 
 services:
+  rabbitmq:
+       image: rabbitmq:3.9-management
+       container_name: 'rabbitmq_authservice'
+       ports:
+           - 5672:5672
+           - 15672:15672
+       volumes:
+           - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
+           - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
   api:
+    container_name: 'auth_api_isolated'
     build: .
     ports:
       - "5000:80"
-
+    depends_on:
+      - db
+      - rabbitmq
   db:
+   container_name: 'auth_db_isolated'
    image: mysql:5.7
    restart: always
    environment:
@@ -20,4 +33,3 @@ services:
      - my-db:/var/lib/mysql
 volumes:
   my-db:
-

@@ -64,7 +64,7 @@ namespace UserService.Services {
         }
 
         public UserService(IConfiguration config) {
-            _connString = config.GetConnectionString("IsolatedDockerConnection");
+            _connString = config.GetConnectionString("DockerConnection");
 
         }
     }

@@ -13,6 +13,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
+using AuthorisationService.Services;
+using AuthorisationService.Producers;
 
 namespace AuthorisationService {
     public class Startup {
@@ -38,7 +40,10 @@ namespace AuthorisationService {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "AuthorisationService", Version = "v1" });
             });
             services.AddOcelot();
-
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IPasswordService, PasswordService>();
+            services.AddScoped<IAuthenticationService, AuthenticationService>();
+            services.AddScoped<IRabbitProducer, RabbitProducer>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
