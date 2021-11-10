@@ -20,7 +20,8 @@ namespace AuthorisationService.Controllers {
         public async Task<IActionResult> Authenticate(AuthenticateRequest request) {
 
             try {
-                return Ok(await _authenticationService.Authenticate(request));
+                var result = await _authenticationService.Authenticate(request);
+                return result != null ? Ok(result) : StatusCode(401, new { Error = "Invalid username/password combination." });
             }catch(Exception e) {
                 _logger.LogError(JsonConvert.SerializeObject(e));
                 return StatusCode(500, e.Message);

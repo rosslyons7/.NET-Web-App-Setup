@@ -37,7 +37,6 @@ namespace AuthorisationService.Services {
 
             var hashSaltSize = int.Parse(_config["Encryption:HashSaltSize"]);
             var hashSize = int.Parse(_config["Encryption:HashSize"]);
-            Console.WriteLine($"Hashed Password -- {hashedPassword}");
             if (!IsHashSupported(hashedPassword)) throw new NotSupportedException("The hash type is not supported");
 
             //Exctract information and Base64 string

@@ -45,31 +45,6 @@ namespace UserService.Controllers {
             }
         }
 
-        [HttpPost(nameof(CreateUser))]
-        public async Task<IActionResult> CreateUser(CreateUserRequest request) {
-
-            try {
-                var result = await _userService.CreateUser(request);
-                return Ok(result);
-            }
-            catch(Exception e) {
-                return StatusCode(500, e.Message);
-            }
-        }
-
-        [HttpDelete(nameof(DeleteUser))]
-        public async Task<IActionResult> DeleteUser(Guid id) {
-            try {
-
-                var result = await _userService.DeleteUser(id);
-                if (result > 0) return Ok();
-                return BadRequest($"Unable to delete user with Id {id}");
-            }
-            catch (Exception e) {
-                return StatusCode(500, e.Message);
-            }
-        }
-
         [HttpPut(nameof(UpdateUser))]
         public async Task<IActionResult> UpdateUser(UpdateUserRequest request) {
             try {

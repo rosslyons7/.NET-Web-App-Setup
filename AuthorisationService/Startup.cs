@@ -15,6 +15,8 @@ using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
 using AuthorisationService.Services;
 using AuthorisationService.Producers;
+using System.Text;
+using Microsoft.IdentityModel.Tokens;
 
 namespace AuthorisationService {
     public class Startup {
@@ -35,6 +37,21 @@ namespace AuthorisationService {
             });
 
             services.AddControllers();
+
+            var authenticationProviderKey = "TestKey";
+            var key = Encoding.ASCII.GetBytes(Configuration["Encryption:JwtSecret"]);
+            var signingKey = new SymmetricSecurityKey(key);
+            var authCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature);
+
+            services.AddAuthentication()
+                .AddJwtBearer(authenticationProviderKey, x => {
+                    x.TokenValidationParameters = new TokenValidationParameters
+                    {
+                      IssuerSigningKey = signingKey,
+                      ValidateAudience = false,
+                      ValidateIssuer = false
+                    };
+                });
 
             services.AddSwaggerGen(c => {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "AuthorisationService", Version = "v1" });

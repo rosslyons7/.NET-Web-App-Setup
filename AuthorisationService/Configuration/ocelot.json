@@ -9,7 +9,14 @@
       ],
       "DownstreamPathTemplate": "/api/user",
       "DownstreamScheme": "http",
-      "UpstreamPathTemplate": "/GetUsers"
+      "UpstreamPathTemplate": "/GetUsers",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "TestKey",
+        "AllowedScopes": []
+      },
+      "RouteClaimsRequirement": {
+        "Permissions": "User"
+      }
     },
     {
       "DownstreamHostAndPorts": [
@@ -20,7 +27,14 @@
       ],
       "DownstreamPathTemplate": "/api/user/GetUser",
       "DownstreamScheme": "http",
-      "UpstreamPathTemplate": "/GetUser"
+      "UpstreamPathTemplate": "/GetUser",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "TestKey",
+        "AllowedScopes": []
+      },
+      "RouteClaimsRequirement": {
+        "Permissions": "User"
+      }
     },
     {
       "DownstreamHostAndPorts": [
@@ -31,7 +45,14 @@
       ],
       "DownstreamPathTemplate": "/api/user/CreateUser",
       "DownstreamScheme": "http",
-      "UpstreamPathTemplate": "/CreateUser"
+      "UpstreamPathTemplate": "/CreateUser",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "TestKey",
+        "AllowedScopes": []
+      },
+      "RouteClaimsRequirement": {
+        "Permissions": "User"
+      }
     },
     {
       "DownstreamHostAndPorts": [
@@ -42,7 +63,14 @@
       ],
       "DownstreamPathTemplate": "/api/user/UpdateUser",
       "DownstreamScheme": "http",
-      "UpstreamPathTemplate": "/UpdateUser"
+      "UpstreamPathTemplate": "/UpdateUser",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "TestKey",
+        "AllowedScopes": []
+      },
+      "RouteClaimsRequirement": {
+        "Permissions": "User"
+      }
     },
     {
       "DownstreamHostAndPorts": [
@@ -53,7 +81,14 @@
       ],
       "DownstreamPathTemplate": "/api/user/DeleteUser",
       "DownstreamScheme": "http",
-      "UpstreamPathTemplate": "/DeleteUser"
+      "UpstreamPathTemplate": "/DeleteUser",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "TestKey",
+        "AllowedScopes": []
+      },
+      "RouteClaimsRequirement": {
+        "Permissions": "User"
+      }
     }
   ]
 }
