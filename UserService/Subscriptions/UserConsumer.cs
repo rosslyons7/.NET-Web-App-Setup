@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using UserService.Messages.Consumed;
 using UserService.Requests;
 using UserService.Services;
 
@@ -22,7 +23,7 @@ namespace UserService.Subscriptions {
             switch(routingKey){
                 case "user.create.*":
                     try {
-                        return HandleResponse(await userService.CreateUser(JsonConvert.DeserializeObject<CreateUserRequest>(message)));
+                        return HandleResponse(await userService.CreateUser(JsonConvert.DeserializeObject<UserCreated>(message)));
                     }
                     catch (Exception e) {
                         _logger.LogError($"UserService/UserConsumer/CreateUser -- ${e.Message}");

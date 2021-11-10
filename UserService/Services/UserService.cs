@@ -7,6 +7,7 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using UserService.Entities;
+using UserService.Messages.Consumed;
 using UserService.Requests;
 
 namespace UserService.Services {
@@ -30,7 +31,7 @@ namespace UserService.Services {
             }
         }
 
-        public async Task<int> CreateUser(CreateUserRequest request) {
+        public async Task<int> CreateUser(UserCreated request) {
 
             if (request.Id.Equals(Guid.Empty)) return 0;
             using (IDbConnection db = new MySqlConnection(_connString)) {
@@ -64,7 +65,7 @@ namespace UserService.Services {
         }
 
         public UserService(IConfiguration config) {
-            _connString = config.GetConnectionString("DockerConnection");
+            _connString = config.GetConnectionString("DefaultConnection");
 
         }
     }

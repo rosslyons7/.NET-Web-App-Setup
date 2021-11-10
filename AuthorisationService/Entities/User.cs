@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 namespace AuthorisationService.Entities {
     public record User {
 
-        public Guid Id { get; set; }
+        public string Id { get; set; }
         public string Username { get; set; }
         public string Password { get; set; }
         public string Role { get; set; }

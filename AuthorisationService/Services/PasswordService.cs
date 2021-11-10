@@ -37,10 +37,11 @@ namespace AuthorisationService.Services {
 
             var hashSaltSize = int.Parse(_config["Encryption:HashSaltSize"]);
             var hashSize = int.Parse(_config["Encryption:HashSize"]);
+            Console.WriteLine($"Hashed Password -- {hashedPassword}");
             if (!IsHashSupported(hashedPassword)) throw new NotSupportedException("The hash type is not supported");
 
             //Exctract information and Base64 string
-            var splittedHashString = hashedPassword.Replace("$HASH|V1$", "").Split("$");
+            var splittedHashString = hashedPassword.Replace("$HASH|V1$", "").Split('$');
             var iterations = int.Parse(splittedHashString[0]);
             var base64Hash = splittedHashString[1];
 
@@ -64,8 +65,9 @@ namespace AuthorisationService.Services {
             }
         }
 
-        private static bool IsHashSupported(string hashString) =>
-            hashString.Contains("HASH|V!$");
+        private static bool IsHashSupported(string hashString) {
+            return hashString.Contains("HASH|V1$");
+        }
 
 
         public PasswordService(IConfiguration config) {

@@ -44,7 +44,7 @@ namespace AuthorisationService.Services {
         public UserService(IConfiguration config, IPasswordService passwordService, IRabbitProducer rabbit) {
 
 
-            _connString = config.GetConnectionString("DockerConnection");
+            _connString = config.GetConnectionString("DefaultConnection");
             _passwordService = passwordService;
             _rabbit = rabbit;
         }
