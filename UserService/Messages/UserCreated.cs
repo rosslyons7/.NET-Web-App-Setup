@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace UserService.Messages.Consumed {
-    public record UserCreated {
+namespace Messages {
+    public interface UserCreated {
 
         public Guid Id { get; set; }
         public string Username { get; set; }

@@ -1,3 +1,5 @@
+using MassTransit;
+using MassTransit.Definition;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -10,8 +12,10 @@ using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using UserService.Services;
+using UserService.SubscriptionDefinitions;
 using UserService.Subscriptions;
 
 namespace UserService {
@@ -31,14 +35,24 @@ namespace UserService {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "UserService", Version = "v1" });
             });
 
+            services.AddMassTransit(x =>
+            {
+                x.AddConsumer<UserCreatedConsumer, UserCreatedConsumerDefinition>();
+                x.AddConsumer<UserDeletedConsumer, UserDeletedConsumerDefinition>();
+                x.SetEndpointNameFormatter(new DefaultEndpointNameFormatter(Assembly.GetEntryAssembly().GetName().Name + ".", false));
+                
+                x.UsingRabbitMq((context, cfg) =>
+                {
+                    cfg.Host("rabbitmq", "/", h =>
+                    {
+
+                    });
+                    cfg.ConfigureEndpoints(context);
+                });
+            });
+            services.AddMassTransitHostedService();
             services.AddScoped<IUserService, Services.UserService>();
-            services.AddSingleton<IHostedService>(sp => new UserConsumer(
-                    exchange: "user.exchange",
-                    queue: "user.queue",
-                    routingKey: "user.*.*",
-                    loggerFactory: sp.GetRequiredService<ILoggerFactory>(),
-                    serviceProvider: sp.GetRequiredService<IServiceProvider>(),
-                    config: Configuration));
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -7,8 +7,9 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using UserService.Entities;
-using UserService.Messages.Consumed;
+using Messages;
 using UserService.Requests;
+
 
 namespace UserService.Services {
     public class UserService : IUserService {
@@ -18,14 +19,14 @@ namespace UserService.Services {
         public async Task<IEnumerable<User>> GetUsers() {
             using (IDbConnection db = new MySqlConnection(_connString)) {
 
-                var result = await db.QueryAsync<User>("SELECT id Id, first_name FirstName, last_name LastName, email Email, job_title JobTitle, date_of_birth DateOfBirth FROM users");
+                var result = await db.QueryAsync<User>("SELECT * FROM users");
                 return result;
             }
         }
 
         public async Task<User> GetUser(Guid id) {
             using (IDbConnection db = new MySqlConnection(_connString)) {
-                var sql = "SELECT id Id, first_name FirstName, last_name LastName, email Email, job_title JobTitle, date_of_birth DateOfBirth FROM users WHERE id=@Id";
+                var sql = "SELECT * FROM users WHERE Id=@Id";
                 var result = await db.QueryFirstAsync<User>(sql, new { Id = id });
                 return result;
             }
@@ -45,21 +46,21 @@ namespace UserService.Services {
             using (IDbConnection db = new MySqlConnection(_connString)) {
 
                 var result = await db.ExecuteAsync("UPDATE users SET " +
-                    "first_name = @FirstName, " +
-                    "last_name = @LastName, " +
-                    "email = @Email, " +
-                    "job_title = @JobTitle, " +
-                    "date_of_birth = @DateOfBirth" +
-                    "WHERE id = @Id", request);
+                    "FirstName = @FirstName, " +
+                    "LastName = @LastName, " +
+                    "Email = @Email, " +
+                    "JobTitle = @JobTitle, " +
+                    "DateOfBirth = @DateOfBirth" +
+                    "WHERE Id = @Id", request);
 
                 return result;
             }
         }
 
-        public async Task<int> DeleteUser(Guid id) {
+        public async Task<int> DeleteUser(UserDeleted request) {
             using (IDbConnection db = new MySqlConnection(_connString)) {
 
-                var result = await db.ExecuteAsync("DELETE FROM users WHERE id = @Id", new { Id = id });
+                var result = await db.ExecuteAsync("DELETE FROM users WHERE Id = @Id", new { Id = request.Id });
                 return result;
             }
         }

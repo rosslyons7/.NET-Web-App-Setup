@@ -17,6 +17,7 @@ using AuthorisationService.Services;
 using AuthorisationService.Producers;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
+using MassTransit;
 
 namespace AuthorisationService {
     public class Startup {
@@ -56,11 +57,24 @@ namespace AuthorisationService {
             services.AddSwaggerGen(c => {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "AuthorisationService", Version = "v1" });
             });
+
+            services.AddMassTransit(x =>
+            {
+                x.UsingRabbitMq((context, cfg) =>
+                {
+                    cfg.Host("rabbitmq", "/", h =>
+                    {
+
+                    });
+                });
+            });
+
             services.AddOcelot();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IPasswordService, PasswordService>();
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddScoped<IRabbitProducer, RabbitProducer>();
+            services.AddMassTransitHostedService();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

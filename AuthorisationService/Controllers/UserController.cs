@@ -19,8 +19,20 @@ namespace AuthorisationService.Controllers {
             try {
                 await _userService.CreateUser(request);
                 return Ok();
-            }catch(Exception e) {
+            } 
+            catch (Exception e) {
                 return StatusCode(500, e.Message);
+            }
+        }
+
+        [HttpDelete]
+        public async Task<IActionResult> DeleteUser(Guid id) {
+            try {
+                await _userService.DeleteUser(id);
+                return Ok();
+            }
+            catch (Exception e) {
+                return BadRequest(e.Message);
             }
         }
 

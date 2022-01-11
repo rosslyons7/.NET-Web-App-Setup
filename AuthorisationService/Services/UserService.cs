@@ -9,13 +9,15 @@ using MySqlConnector;
 using AuthorisationService.Requests;
 using Newtonsoft.Json;
 using AuthorisationService.Producers;
+using Messages;
+using MassTransit;
 
 namespace AuthorisationService.Services {
     public class UserService : IUserService {
 
         private readonly string _connString;
         private readonly IPasswordService _passwordService;
-        private readonly IRabbitProducer _rabbit;
+        private readonly IPublishEndpoint _publishEndpoint;
 
         public async Task<User> GetUserByUsername(string username) {
 
@@ -30,23 +32,43 @@ namespace AuthorisationService.Services {
         }
 
         public async Task CreateUser(CreateUserRequest user) {
-            using (var db = new MySqlConnection(_connString)) {
-                string sql = "INSERT INTO users VALUES (@Id, @Username, @Password, @Role)";
-                var hash = _passwordService.HashPassword(user.Password);
-                var obj = new { user.Id, user.Username, Password = hash, user.Role };
-                await db.ExecuteAsync(sql, obj);
-                await db.DisposeAsync();
-                _rabbit.ProduceMessage(user, "user.exchange", "user.create.*");
-            }
+
+            using var db = new MySqlConnection(_connString); 
+            string sql = "INSERT INTO users VALUES (@Id, @Username, @Password, @Role)";
+            var hash = _passwordService.HashPassword(user.Password);
+            var obj = new { user.Id, user.Username, Password = hash, user.Role };
+            await db.ExecuteAsync(sql, obj);
+            await db.DisposeAsync();
+            await _publishEndpoint.Publish<UserCreated>(new
+            {
+                user.Id,
+                user.Username,
+                user.Role,
+                user.FirstName,
+                user.LastName,
+                user.JobTitle,
+                user.Email,
+                user.DateOfBirth
+            });
+
         }
 
+        public async Task DeleteUser(Guid id) {
+            using var db = new MySqlConnection(_connString);
+            var sql = "DELETE FROM users WHERE Id=@Id";
+            await db.ExecuteAsync(sql, new { Id = id });
+            await _publishEndpoint.Publish<UserDeleted>(new
+            {
+                Id = id
+            });
+        }
 
-        public UserService(IConfiguration config, IPasswordService passwordService, IRabbitProducer rabbit) {
+        public UserService(IConfiguration config, IPasswordService passwordService, IPublishEndpoint publishEndpoint) {
 
 
             _connString = config.GetConnectionString("DefaultConnection");
             _passwordService = passwordService;
-            _rabbit = rabbit;
+            _publishEndpoint = publishEndpoint;
         }
     }
 }
