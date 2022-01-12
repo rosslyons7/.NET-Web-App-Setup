@@ -43,18 +43,28 @@ namespace UserService.Services {
         }
 
         public async Task<int> UpdateUser(UpdateUserRequest request) {
+
+            var sql = "UPDATE users SET ";
+            var setters = new List<string>();
+            if (request.FirstName != null) setters.Add("FirstName = @FirstName");
+            if (request.LastName != null) setters.Add(GetSqlSetter("LastName = @LastName", setters.Count));
+            if (request.Email != null) setters.Add(GetSqlSetter("Email = @Email", setters.Count));
+            if (request.JobTitle != null) setters.Add(GetSqlSetter("JobTitle = @JobTitle", setters.Count));
+            if (request.DateOfBirth != DateTime.MinValue) setters.Add(GetSqlSetter("DateOfBirth = @DateOfBirth", setters.Count));
+            if (setters.Count == 0) throw new Exception("No update variables given.");
+            foreach (var setter in setters) sql += setter;
+            sql += " WHERE Id = @Id";
             using (IDbConnection db = new MySqlConnection(_connString)) {
 
-                var result = await db.ExecuteAsync("UPDATE users SET " +
-                    "FirstName = @FirstName, " +
-                    "LastName = @LastName, " +
-                    "Email = @Email, " +
-                    "JobTitle = @JobTitle, " +
-                    "DateOfBirth = @DateOfBirth" +
-                    "WHERE Id = @Id", request);
+                var result = await db.ExecuteAsync(sql, request);
 
                 return result;
             }
+        }
+
+        private static string GetSqlSetter(string sqlSetter, int settersSize) {
+            if (settersSize > 0) return $", {sqlSetter}";
+            return sqlSetter;
         }
 
         public async Task<int> DeleteUser(UserDeleted request) {
