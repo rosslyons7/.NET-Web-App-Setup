@@ -14,7 +14,6 @@ using System.Threading.Tasks;
 using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
 using AuthorisationService.Services;
-using AuthorisationService.Producers;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using MassTransit;
@@ -73,7 +72,6 @@ namespace AuthorisationService {
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IPasswordService, PasswordService>();
             services.AddScoped<IAuthenticationService, AuthenticationService>();
-            services.AddScoped<IRabbitProducer, RabbitProducer>();
             services.AddMassTransitHostedService();
         }
 

@@ -8,7 +8,6 @@ using AuthorisationService.Entities;
 using MySqlConnector;
 using AuthorisationService.Requests;
 using Newtonsoft.Json;
-using AuthorisationService.Producers;
 using Messages;
 using MassTransit;
 
@@ -62,6 +61,45 @@ namespace AuthorisationService.Services {
                 Id = id
             });
         }
+
+        public async Task UpdateUsername(UpdateUsernameRequest request) {
+
+            using var db = new MySqlConnection(_connString);
+            string sql = "SELECT * FROM users WHERE Id=@Id";
+            var result = await db.QueryFirstOrDefaultAsync<User>(sql, new { request.Id });
+
+            if (_passwordService.VerifyPassword(request.Password, result.Password)) {
+
+                await db.ExecuteAsync("UPDATE users SET username=@NewUsername WHERE Id=@Id", new { request.NewUsername, request.Id });
+                await db.DisposeAsync();
+            }
+            else {
+                throw new Exception("Incorrect password.");
+            }
+
+
+            await db.DisposeAsync();
+        }
+
+        public async Task ChangePassword(ChangePasswordRequest request) {
+
+            using var db = new MySqlConnection(_connString);
+            string sql = "SELECT * FROM users WHERE Id=@Id";
+            var result = await db.QueryFirstOrDefaultAsync<User>(sql, new { request.Id });
+
+            if( _passwordService.VerifyPassword(request.OldPassword, result.Password)) {
+
+                var hash = _passwordService.HashPassword(request.NewPassword);
+                string updateSql = "UPDATE users SET password=@Hash WHERE Id=@Id";
+                await db.ExecuteAsync(updateSql, new { Hash = hash, request.Id });
+                await db.DisposeAsync();
+            }
+            else {
+                throw new Exception("Incorrect password.");
+            }
+        }
+
+        
 
         public UserService(IConfiguration config, IPasswordService passwordService, IPublishEndpoint publishEndpoint) {
 

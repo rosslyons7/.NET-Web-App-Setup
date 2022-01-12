@@ -36,6 +36,28 @@ namespace AuthorisationService.Controllers {
             }
         }
 
+        [HttpPut(nameof(ChangePassword))]
+        public async Task<IActionResult> ChangePassword(ChangePasswordRequest request) {
+            try {
+                await _userService.ChangePassword(request);
+                return Ok();
+            }
+            catch(Exception e) {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpPut(nameof(UpdateUsername))]
+        public async Task<IActionResult> UpdateUsername(UpdateUsernameRequest request) {
+            try {
+                await _userService.UpdateUsername(request);
+                return Ok();
+            }
+            catch(Exception e) {
+                return BadRequest(e.Message);
+            }
+        }
+
         public UserController(IUserService userService) {
 
             _userService = userService;

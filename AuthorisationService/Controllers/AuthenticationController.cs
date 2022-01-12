@@ -16,7 +16,7 @@ namespace AuthorisationService.Controllers {
         private readonly IAuthenticationService _authenticationService;
         private readonly ILogger<AuthenticationController> _logger;
 
-        [HttpPost(nameof(Authenticate))]
+        [HttpPost]
         public async Task<IActionResult> Authenticate(AuthenticateRequest request) {
 
             try {

@@ -8,5 +8,7 @@ namespace AuthorisationService.Services {
         Task CreateUser(CreateUserRequest user);
         Task<User> GetUserByUsername(string username);
         Task DeleteUser(Guid id);
+        Task ChangePassword(ChangePasswordRequest request);
+        Task UpdateUsername(UpdateUsernameRequest request);
     }
 }

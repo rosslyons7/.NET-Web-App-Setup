@@ -68,7 +68,6 @@ namespace AuthorisationService.Services {
             return hashString.Contains("HASH|V1$");
         }
 
-
         public PasswordService(IConfiguration config) {
             _config = config;
         }
