@@ -46,18 +46,22 @@ namespace UserService.Services {
 
             var sql = "UPDATE users SET ";
             var setters = new List<string>();
+
+            //optionally including branches to update in SQL depending on if the
+            //object property is set in the request
+
             if (request.FirstName != null) setters.Add("FirstName = @FirstName");
             if (request.LastName != null) setters.Add(GetSqlSetter("LastName = @LastName", setters.Count));
             if (request.Email != null) setters.Add(GetSqlSetter("Email = @Email", setters.Count));
             if (request.JobTitle != null) setters.Add(GetSqlSetter("JobTitle = @JobTitle", setters.Count));
             if (request.DateOfBirth != DateTime.MinValue) setters.Add(GetSqlSetter("DateOfBirth = @DateOfBirth", setters.Count));
             if (setters.Count == 0) throw new Exception("No update variables given.");
+
             foreach (var setter in setters) sql += setter;
             sql += " WHERE Id = @Id";
+
             using (IDbConnection db = new MySqlConnection(_connString)) {
-
                 var result = await db.ExecuteAsync(sql, request);
-
                 return result;
             }
         }

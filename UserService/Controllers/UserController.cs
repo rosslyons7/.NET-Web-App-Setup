@@ -34,7 +34,7 @@ namespace UserService.Controllers {
 
         }
 
-        [HttpGet(nameof(GetUser))]
+        [HttpGet("{id}")]
         public async Task<IActionResult> GetUser(Guid Id) {
             try {
 
@@ -45,7 +45,7 @@ namespace UserService.Controllers {
             }
         }
 
-        [HttpPut(nameof(UpdateUser))]
+        [HttpPut]
         public async Task<IActionResult> UpdateUser(UpdateUserRequest request) {
             try {
 

@@ -9,7 +9,7 @@
       ],
       "DownstreamPathTemplate": "/api/user",
       "DownstreamScheme": "http",
-      "UpstreamPathTemplate": "/GetUsers",
+      "UpstreamPathTemplate": "/gateway/user",
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "TestKey",
         "AllowedScopes": []
@@ -25,9 +25,10 @@
           "Port": "80"
         }
       ],
-      "DownstreamPathTemplate": "/api/user/GetUser",
+      "DownstreamPathTemplate": "/api/user/{id}",
       "DownstreamScheme": "http",
-      "UpstreamPathTemplate": "/GetUser",
+      "UpstreamPathTemplate": "/gateway/user/{id}",
+      "UpstreamHttpMethod":  ["GET"],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "TestKey",
         "AllowedScopes": []
@@ -43,45 +44,10 @@
           "Port": "80"
         }
       ],
-      "DownstreamPathTemplate": "/api/user/CreateUser",
+      "DownstreamPathTemplate": "/api/user",
       "DownstreamScheme": "http",
-      "UpstreamPathTemplate": "/CreateUser",
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "TestKey",
-        "AllowedScopes": []
-      },
-      "RouteClaimsRequirement": {
-        "Permissions": "User"
-      }
-    },
-    {
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "user_api",
-          "Port": "80"
-        }
-      ],
-      "DownstreamPathTemplate": "/api/user/UpdateUser",
-      "DownstreamScheme": "http",
-      "UpstreamPathTemplate": "/UpdateUser",
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "TestKey",
-        "AllowedScopes": []
-      },
-      "RouteClaimsRequirement": {
-        "Permissions": "User"
-      }
-    },
-    {
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "user_api",
-          "Port": "80"
-        }
-      ],
-      "DownstreamPathTemplate": "/api/user/DeleteUser",
-      "DownstreamScheme": "http",
-      "UpstreamPathTemplate": "/DeleteUser",
+      "UpstreamPathTemplate": "/gateway/user/update",
+      "UpstreamHttpMethod": [ "PUT" ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "TestKey",
         "AllowedScopes": []

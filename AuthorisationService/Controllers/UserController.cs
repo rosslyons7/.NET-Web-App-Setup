@@ -13,7 +13,7 @@ namespace AuthorisationService.Controllers {
     public class UserController : ControllerBase {
         private readonly IUserService _userService;
 
-        [HttpPost(nameof(CreateUser))]
+        [HttpPost]
         public async Task<IActionResult> CreateUser(CreateUserRequest request) {
 
             try {
