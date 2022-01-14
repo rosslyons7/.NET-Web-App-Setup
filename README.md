@@ -1,7 +1,7 @@
 # .NET Web-App Setup
 
 ## Description
-This repo contains the initial setup for a web application API programmed in .NET. The application is structured using a microservice architecture and an Ocelot API gateway.
+This repo contains the initial setup for a web application API programmed in .NET. The application is structured using a microservice architecture and an Ocelot API gateway. Microservices publish/receive messages using RabbitMQ, which is setup with MassTransit.
 
 ## Setup
 The docker-compose file contains the setup for the API's and databases which will run in containers on the same docker network.
